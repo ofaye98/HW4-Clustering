@@ -2,7 +2,6 @@
 import numpy as np
 import pytest
 from cluster.kmeans import KMeans
-from cluster.silhouette import Silhouette  
 
 def test_kmeans_init():
     # test valid initialization

@@ -96,7 +96,7 @@ class KMeans:
             ])
             
             # convergence check: if error change is less than tol and error is not None, then break loop
-            if abs(current_error - self.error) < self.tol and self.error is not None:
+            if self.error is not None and abs(current_error - self.error) < self.tol:
                 break
             
             # update with new centroids and error

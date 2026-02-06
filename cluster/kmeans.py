@@ -76,46 +76,59 @@ class KMeans:
         if self.k > n: # check if k is greater than num of samples
             raise ValueError(f"k={self.k}, cannot be greater than number of samples ({n})")
         
-        # initialize centroids using k-means++ for better initialization
-        np.random.seed(42)  # set seed for reproducibility
-        centroids = []
-        # choose first centroid randomly
-        centroids.append(mat[np.random.choice(n)])
+        best_error = float('inf')
+        best_centroids = None
+        np.random.seed(42)
         
-        # choose remaining k-1 centroids
-        for _ in range(self.k - 1): # loop until we have k centroids
-            distances = cdist(mat, np.array(centroids)) # compute distances from each point to nearest existing centroid
-            min_distances = np.min(distances, axis=1) # compute minimum distance to nearest centroid for each point
-            # probability of choosing a point is proportional to distance squared
-            probabilities = min_distances ** 2 
-            probabilities /= probabilities.sum() # normalize to sum to 1
-            centroids.append(mat[np.random.choice(n, p=probabilities)])
+        # try multiple initializations to find best result
+        num_inits = 10
+        for init_idx in range(num_inits):
+            # initialize centroids using k-means++ for better initialization
+            centroids = []
+            # choose first centroid randomly
+            centroids.append(mat[np.random.choice(n)])
+            
+            # choose remaining k-1 centroids
+            for _ in range(self.k - 1): # loop until we have k centroids
+                distances = cdist(mat, np.array(centroids)) # compute distances from each point to nearest existing centroid
+                min_distances = np.min(distances, axis=1) # compute minimum distance to nearest centroid for each point
+                # probability of choosing a point is proportional to distance squared
+                probabilities = min_distances ** 2 
+                probabilities /= probabilities.sum() # normalize to sum to 1
+                centroids.append(mat[np.random.choice(n, p=probabilities)])
+            
+            centroids = np.array(centroids)
+            
+            # run kmeans algorithm for this initialization
+            error = None
+            for _ in range(self.max_iter):
+                distances = cdist(mat, centroids) # calc dist from each point to each centroid
+                labels = np.argmin(distances, axis=1) # assign each point to nearest centroid
+                
+                # current error = sum of squared distances to nearest centroid / number of samples
+                current_error = np.sum(np.min(distances, axis=1) ** 2) / mat.shape[0]
+                
+                # convergence check: if error change is less than tol and error is not None, then break loop
+                if error is not None and abs(current_error - error) < self.tol:
+                    break
+                
+                # new centroid = mean of the assigned points
+                new_centroids = np.array([ # if no points get assigned to a centroid, just keep the old centroid
+                    mat[labels == i].mean(axis=0) if np.any(labels == i) else centroids[i]
+                    for i in range(self.k) # loop through each centroid index and compute new centroid location
+                ])
+                
+                # update with new centroids and error
+                centroids = new_centroids
+                error = current_error
+            
+            # keep track of best result
+            if error < best_error:
+                best_error = error
+                best_centroids = centroids
         
-        self.centroids = np.array(centroids)
-        self.error = None  # initialize error
-        
-        # run kmeans algorithm
-        for _ in range(self.max_iter):
-
-            distances = cdist(mat, self.centroids) # calc dist from each point to each centroid
-            labels = np.argmin(distances, axis=1) # assign each point to nearest centroid
-            
-            # current error = sum of squared distances to nearest centroid / number of samples
-            current_error = np.sum(np.min(distances, axis=1) ** 2) / mat.shape[0]
-            
-            # convergence check: if error change is less than tol and error is not None, then break loop
-            if self.error is not None and abs(current_error - self.error) < self.tol:
-                break
-            
-            # new centroid = mean of the assigned points
-            new_centroids = np.array([ # if no points get assigned to a centroid, just keep the old centroid
-                mat[labels == i].mean(axis=0) if np.any(labels == i) else self.centroids[i]
-                for i in range(self.k) # loop through each centroid index and compute new centroid location
-            ])
-            
-            # update with new centroids and error
-            self.centroids = new_centroids
-            self.error = current_error
+        self.centroids = best_centroids
+        self.error = best_error
 
     def predict(self, mat: np.ndarray) -> np.ndarray:
         """

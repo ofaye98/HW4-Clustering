@@ -82,7 +82,7 @@ class KMeans:
         
         # run kmeans algorithm
         for _ in range(self.max_iter):
-            
+
             distances = cdist(mat, self.centroids) # calc dist from each point to each centroid
             labels = np.argmin(distances, axis=1) # assign each point to nearest centroid
             
@@ -147,6 +147,10 @@ class KMeans:
             float
                 the squared-mean error of the fit model
         """
+        # if error is None, then fit was not called yet, so raise an error
+        if self.error is None:
+            raise ValueError("must call .fit() before getting error")
+        return self.error
 
     def get_centroids(self) -> np.ndarray:
         """
@@ -156,3 +160,7 @@ class KMeans:
             np.ndarray
                 a `k x m` 2D matrix representing the cluster centroids of the fit model
         """
+        # if centroids is None, then fit was not called yet, so raise an error
+        if self.centroids is None:
+            raise ValueError("must call .fit() before getting centroids")
+        return self.centroids

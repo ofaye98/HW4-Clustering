@@ -76,10 +76,22 @@ class KMeans:
         if self.k > n: # check if k is greater than num of samples
             raise ValueError(f"k={self.k}, cannot be greater than number of samples ({n})")
         
-        # initialize centroids randomly by selecting k random samples from the data
+        # initialize centroids using k-means++ for better initialization
         np.random.seed(42)  # set seed for reproducibility
-        indices = np.random.choice(n, size=self.k, replace=False)
-        self.centroids = mat[indices].copy() # use to avoid modifying original data
+        centroids = []
+        # choose first centroid randomly
+        centroids.append(mat[np.random.choice(n)])
+        
+        # choose remaining k-1 centroids
+        for _ in range(self.k - 1): # loop until we have k centroids
+            distances = cdist(mat, np.array(centroids)) # compute distances from each point to nearest existing centroid
+            min_distances = np.min(distances, axis=1) # compute minimum distance to nearest centroid for each point
+            # probability of choosing a point is proportional to distance squared
+            probabilities = min_distances ** 2 
+            probabilities /= probabilities.sum() # normalize to sum to 1
+            centroids.append(mat[np.random.choice(n, p=probabilities)])
+        
+        self.centroids = np.array(centroids)
         self.error = None  # initialize error
         
         # run kmeans algorithm

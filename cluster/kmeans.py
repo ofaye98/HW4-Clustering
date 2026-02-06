@@ -20,6 +20,31 @@ class KMeans:
             max_iter: int
                 the maximum number of iterations before quitting model fit
         """
+        # error handling for k inputs
+        if not isinstance(k, int): # check if k is an integer
+            raise TypeError(f"k must be an integer, got {type(k).__name__}")
+        if k <= 0: # check if k is zero or negative
+            raise ValueError(f"k must be >= 1, got {k}")
+        
+        # error handling for tol inputs
+        if not isinstance(tol, (float, int)): # check if tol is a float or int
+            raise TypeError(f"tol must be a float, got {type(tol).__name__}")
+        if tol < 0: # check if tol is negative
+            raise ValueError("tol must be >= 0")
+        
+        # error handling for max_iter inputs
+        if not isinstance(max_iter, int): # check if max_iter is an integer
+            raise TypeError(f"max_iter must be an integer, got {type(max_iter).__name__}")
+        if max_iter <= 0: # check if max_iter is zero or negative
+            raise ValueError("max_iter must be >= 1")
+        
+        # initialize attributes
+        self.k = k
+        self.tol = float(tol)
+        self.max_iter = max_iter
+        self.centroids = None
+        self.error = None
+        self.n_features = None
 
     def fit(self, mat: np.ndarray):
         """
@@ -36,6 +61,8 @@ class KMeans:
             mat: np.ndarray
                 A 2D matrix where the rows are observations and columns are features
         """
+        
+
 
     def predict(self, mat: np.ndarray) -> np.ndarray:
         """

@@ -77,8 +77,10 @@ class KMeans:
             raise ValueError(f"k={self.k}, cannot be greater than number of samples ({n})")
         
         # initialize centroids randomly by selecting k random samples from the data
+        np.random.seed(42)  # set seed for reproducibility
         indices = np.random.choice(n, size=self.k, replace=False)
         self.centroids = mat[indices].copy() # use to avoid modifying original data
+        self.error = None  # initialize error
         
         # run kmeans algorithm
         for _ in range(self.max_iter):
@@ -89,15 +91,15 @@ class KMeans:
             # current error = sum of squared distances to nearest centroid / number of samples
             current_error = np.sum(np.min(distances, axis=1) ** 2) / mat.shape[0]
             
+            # convergence check: if error change is less than tol and error is not None, then break loop
+            if self.error is not None and abs(current_error - self.error) < self.tol:
+                break
+            
             # new centroid = mean of the assigned points
             new_centroids = np.array([ # if no points get assigned to a centroid, just keep the old centroid
                 mat[labels == i].mean(axis=0) if np.any(labels == i) else self.centroids[i]
                 for i in range(self.k) # loop through each centroid index and compute new centroid location
             ])
-            
-            # convergence check: if error change is less than tol and error is not None, then break loop
-            if self.error is not None and abs(current_error - self.error) < self.tol:
-                break
             
             # update with new centroids and error
             self.centroids = new_centroids

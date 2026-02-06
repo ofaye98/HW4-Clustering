@@ -82,9 +82,9 @@ class KMeans:
         
         # run kmeans algorithm
         for _ in range(self.max_iter):
-            # assign each point to the nearest centroid
-            distances = cdist(mat, self.centroids) # compute distance from each point to each centroid
-            labels = np.argmin(distances, axis=1) # get index of nearest centroid for each point
+            
+            distances = cdist(mat, self.centroids) # calc dist from each point to each centroid
+            labels = np.argmin(distances, axis=1) # assign each point to nearest centroid
             
             # current error = sum of squared distances to nearest centroid / number of samples
             current_error = np.sum(np.min(distances, axis=1) ** 2) / mat.shape[0]
@@ -119,6 +119,24 @@ class KMeans:
             np.ndarray
                 a 1D array with the cluster label for each of the observations in `mat`
         """
+        # error handling for matrix input
+        if not isinstance(mat, np.ndarray): # check if mat is a numpy array
+            raise TypeError(f"mat must be a numpy array, got {type(mat).__name__}")
+        if mat.ndim != 2: # check if mat is 2D
+            raise ValueError(f"mat must have 2 dimensions, got {mat.ndim} dimensions")
+        if mat.shape[0] == 0: # check if mat has zero samples
+            raise ValueError("mat is empty, got 0 samples")
+        if mat.shape[0] < self.k: # check if mat has fewer samples than k
+            raise ValueError(f"mat has fewer samples ({mat.shape[0]}), but k={self.k}. need at least {self.k} samples")
+        # check if fit was called before predict
+        if self.centroids is None:
+            raise ValueError("must call .fit() before .predict()")
+        
+        distances = cdist(mat, self.centroids) # calc dist from each point to each centroid
+        labels = np.argmin(distances, axis=1) # assign each point to nearest centroid
+        
+        return labels
+
 
     def get_error(self) -> float:
         """

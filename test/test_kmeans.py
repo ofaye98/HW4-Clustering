@@ -6,9 +6,9 @@ from cluster.kmeans import KMeans
 def test_kmeans_init():
     # test valid initialization
     kmeans = KMeans(k=3, tol=1e-5, max_iter=200)
-    assert kmeans.k == 3
-    assert kmeans.tol == 1e-5
-    assert kmeans.max_iter == 200
+    assert kmeans.k == 3, f"Expected k to be 3, got {kmeans.k}"
+    assert kmeans.tol == 1e-5, f"Expected tol to be 1e-5, got {kmeans.tol}"
+    assert kmeans.max_iter == 200, f"Expected max_iter to be 200, got {kmeans.max_iter}"
     
     # test invalid k inputs
     with pytest.raises(TypeError):
@@ -46,11 +46,11 @@ def test_kmeans_fit():
     error = kmeans.get_error()
     
     # check that centroids are close to the true cluster centers
-    assert np.allclose(centroids[0], [1, 2], atol=1e-6) or np.allclose(centroids[0], [4, 2], atol=1e-6)
-    assert np.allclose(centroids[1], [1, 2], atol=1e-6) or np.allclose(centroids[1], [4, 2], atol=1e-6)
+    assert np.allclose(centroids[0], [1, 2], atol=1e-6) or np.allclose(centroids[0], [4, 2], atol=1e-6), f"Expected one centroid to be close to [1, 2] and the other to be close to [4, 2], got {centroids}"
+    assert np.allclose(centroids[1], [1, 2], atol=1e-6) or np.allclose(centroids[1], [4, 2], atol=1e-6), f"Expected one centroid to be close to [1, 2] and the other to be close to [4, 2], got {centroids}"
     
     # check that error is non-negative
-    assert error >= 0
+    assert error >= 0, f"Expected error to be non-negative, got {error}"
 
 def test_kmeans_predict():
     # create a simple dataset with 2 clusters
@@ -65,7 +65,7 @@ def test_kmeans_predict():
     predictions = kmeans.predict(X)
     
     # check that predictions are integers in range [0, k-1]
-    assert np.all((predictions >= 0) & (predictions < 2))
+    assert np.all((predictions >= 0) & (predictions < 2)), f"Expected predictions to be integers in range [0, 1], got {predictions}"
 
 def test_kmeans_get_error():
     kmeans = KMeans(k=2)

@@ -1,3 +1,4 @@
+[![tests](https://github.com/ofaye98/HW4-Clustering/actions/workflows/tests.yml/badge.svg)](https://github.com/ofaye98/HW4-Clustering/actions/workflows/tests.yml)
 # Assignment 4
 Implementation of KMeans and Silhouette Scoring
 

@@ -16,9 +16,8 @@ def test_silhouette_score():
     # check that silhouette scores are between -1 and 1
     assert np.all(scores >= -1) and np.all(scores <= 1), "silhouette scores should be between -1 and 1"
     
-    # check that silhouette scores for points in the same cluster are higher than points in different clusters
-    assert scores[0] > scores[3], "point in cluster 0 should have higher silhouette score than point in cluster 1"
-    assert scores[3] > scores[0], "point in cluster 1 should have higher silhouette score than point in cluster 0"
+    # check that well separated points have positive silhouette scores
+    assert np.all(scores > 0), "all silhouette scores should be positive for well separated clusters"
 
     # make sure score method raises errors for invalid inputs
     with pytest.raises(TypeError):

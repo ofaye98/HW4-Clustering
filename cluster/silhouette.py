@@ -48,7 +48,11 @@ class Silhouette:
             cluster_points = X[y == cluster_label] # find all points in the same cluster as current observation
             
             distances_within_cluster = cdist([X[i]], cluster_points)[0] # compute distances from current observation to all other points in the same cluster
-            a = np.mean(distances_within_cluster) # compute average distance within cluster (a)
+            # a(i) is the mean distance to OTHER points in the same cluster (excluding the point itself)
+            if len(cluster_points) > 1:
+                a = np.mean(distances_within_cluster[distances_within_cluster > 0]) # exclude distance to self (which is 0)
+            else:
+                a = 0.0 # if only one point in cluster, a is 0
 
             # compute average distance to nearest other cluster (b)
             b_min = float('inf') # initialize b_min to infinity so that any computed b will be smaller

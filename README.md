@@ -18,7 +18,7 @@ I also referenced scikit-learn's github repository
 * https://github.com/scikit-learn/scikit-learn/blob/d3898d9d57aeb1e960d266613a2e31b07bca39d7/sklearn/cluster/_kmeans.py#L180 - to check kmeans++ method of getting best candidate centers
 
 For predict method I referenced these websites:
-* https://stackoverflow.com/questions/72862052/predict-method-on-sklearn-kmeans-how-does-it-work-and-what-is-it-doing?utm_source=chatgpt.com - steps used to assign cluster
+* https://stackoverflow.com/questions/72862052/predict-method-on-sklearn-kmeans-how-does-it-work-and-what-is-it-doing - steps used to assign cluster
 * https://github.com/scikit-learn/scikit-learn/blob/d3898d9d57aeb1e960d266613a2e31b07bca39d7/sklearn/cluster/_kmeans.py#L1072 - sci-kit learn predict method
 
 For silhouette score method I referenced:

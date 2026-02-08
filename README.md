@@ -2,6 +2,34 @@
 # Assignment 4
 Implementation of KMeans and Silhouette Scoring
 
+## Description of Methods
+I referenced these videos:
+* https://youtu.be/4b5d3muPQmA?si=tp8GMwLZL29jq5qc - for general understanding of algorithm
+* https://youtu.be/9rp1pzYn3hY?si=FFBs_7_KpUGMcJhH  - for general understanding of algorithm
+
+For error handling I referenced this page
+https://stackoverflow.com/questions/2525845/proper-way-in-python-to-raise-errors-while-setting-variables 
+
+For fit method I referenced these websites:
+* https://medium.com/@avijit.bhattacharjee1996/implementing-k-means-clustering-from-scratch-in-python-a277c23563ac and https://rahuljain788.medium.com/implementing-k-means-clustering-from-scratch-optimization-techniques-and-practical-applications-ceec552f9bab - how to initialize, update/reassign centroids
+* https://www.geeksforgeeks.org/machine-learning/ml-k-means-algorithm/ - learning how kmeans++ algorithm works
+
+I also referenced scikit-learn's github repository
+* https://github.com/scikit-learn/scikit-learn/blob/d3898d9d57aeb1e960d266613a2e31b07bca39d7/sklearn/cluster/_kmeans.py#L180 - to check kmeans++ method of getting best candidate centers
+
+For predict method I referenced these websites:
+* https://stackoverflow.com/questions/72862052/predict-method-on-sklearn-kmeans-how-does-it-work-and-what-is-it-doing?utm_source=chatgpt.com - steps used to assign cluster
+* https://github.com/scikit-learn/scikit-learn/blob/d3898d9d57aeb1e960d266613a2e31b07bca39d7/sklearn/cluster/_kmeans.py#L1072 - sci-kit learn predict method
+
+For silhouette score method I referenced:
+* https://dzone.com/articles/kmeans-silhouette-score-explained-with-python-exam - had a good summary of core concepts
+* https://www.geeksforgeeks.org/machine-learning/what-is-silhouette-score/ - used this formula for calculating the score
+
+Used chatgpt for help with debugging and to get ideas on test cases.
+
+For making package pip installable and to complete github actions, I reference my HW1.
+
+
 # Assignment
 
 ## Overview
